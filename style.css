@@ -1,0 +1,260 @@
+body{
+	font-family:'PT Sans','Open Sans',helvetica,arial,sans-serif;
+	font-size:16px;
+	font-display: optional;
+	padding:2em;
+	background: #f7f4e9;
+	padding: 0;
+	margin: 0;
+	color: #34421e;
+}
+
+.c-head {
+	background: #1d1d2c;
+	position: fixed;
+	width: 100%;
+	z-index: 2;
+	height: 100vh;
+	transition: all 0.5s;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.c-head.active {
+	height: 180px;
+}
+
+
+.c-container {
+	width: 760px;
+	margin: 0 auto;
+	padding: 0;
+	border-radius: 5px;
+	background-clip: padding-box;
+}
+
+.c-upload-form-container {
+	padding: 0;
+}
+
+	.c-upload-form-container .file-upload-form 
+	{
+		padding: 2em 2em;
+		position: relative;
+		width: 300px;
+		height: 140px;
+		margin: 0 auto;
+		margin-bottom: 2em;
+		box-sizing: border-box;
+	}
+	.c-upload-form-container .file-upload-form .drag
+	{
+		font-size: 18px;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		background: rgba(255, 255, 255, 0.05);
+		color: rgba(255, 255, 255, 0.3);
+		border-radius: 5px;
+		border: 2px dashed rgba(255, 255, 255, 0.2);
+		text-align: center;
+		transition: all 0.3s;
+	}
+	.c-upload-form-container .file-upload-form .drag p
+	{
+		padding: 0;
+		margin: 0;
+		line-height: 1.4em;
+	}
+	.c-upload-form-container .file-upload-form .drag a 
+	{
+		color: rgba(255, 255, 255, 0.3);
+	}
+	.c-upload-form-container .file-upload-form:hover .drag a {
+		text-decoration: none;
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.c-upload-form-container .file-upload-form > label {
+		display: none;
+	}
+	.c-upload-form-container .file-upload-form > label:hover {
+		background:	#b40922;
+	}
+	.c-upload-form-container .file-upload-form > input {
+		opacity: 0;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+
+	.active .c-upload-form-container .file-upload-form {
+		height: 40px;
+		width: 360px;
+		margin: 30px auto;
+		padding: 0;
+	}
+
+	.active .c-upload-form-container .file-upload-form .drag {
+		display: block;
+		flex-direction: row;
+		line-height: 40px;
+	} 
+
+	.active .c-upload-form-container .file-upload-form .drag p {
+		display: inline;
+	}
+	.active .c-upload-form-container .file-upload-form .drag br {
+		display: none;
+	}
+
+
+
+.c-review {
+	margin: 0
+}
+
+.c-review-form {
+	display: flex;
+	align-content: center;
+	align-items: center;
+	padding: 0 2em 2em 2em;
+	opacity: 0;
+	transition: all 0.3s;
+}
+.active .c-review-form {
+	opacity: 1;
+}
+
+	.c-review-form > label {
+		color: #f7f4e9;
+		padding: 20px;
+		font-size: 18px;
+		white-space: nowrap;
+	}
+
+	.c-review-form .className {
+		font-size: 18px;
+		padding: 20px;
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+		width: 100%;
+		box-sizing: border-box;
+		border: none;
+		color: #fff;
+		background: rgba(255, 255, 255, 0.2);
+	}
+
+	.c-review-form .btn-create {
+		font-size: 18px;
+		padding: 20px 20px;
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+		border: none;
+		background: #e40c2b;	
+		color: #fff;  
+		width: 120px;
+		text-transform: uppercase;
+		cursor: pointer;
+		font-weight: bold;
+		
+	}
+	.c-review-form .btn-create:hover {
+		background:	#b40922;
+	}
+
+
+
+
+
+
+.c-students {
+	padding: 180px 2em 4em 2em;
+}
+table {
+	border-collapse: collapse;
+	width: 100%;
+	box-sizing: border-box;
+	
+}
+tr {
+	cursor: pointer;
+}
+tr:nth-child(odd) td {
+	background:  rgba(255, 255, 255, 0.4);
+}
+tr:hover td {
+	background:  rgba(255, 255, 255, 0.9);
+}
+th, td {
+	padding: 0.6em 1em;
+	color: #1d1d2c;
+	border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+	font-size: 18px;
+}
+th {
+	 background: #f7f4e9;
+}
+td.chk {
+    text-align: center;
+}
+td.chk > input {
+	height: 0;
+	width: 0;
+	overflow: hidden;
+}
+tr.disabled td {
+    opacity: 0.3;
+    text-decoration: line-through;
+}
+
+tr td:first-child {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+tr td:last-child {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.chkBox {
+	display: inline-block;
+	height: 20px;
+	border-radius: 20px;
+	width: 40px;
+	background: #438945;
+	position: relative;
+	transition: all 0.5s;
+	pointer-events: none;
+}
+.chkBox:after {
+	content: '';
+	background: #f7f4e9;
+	width: 16px;
+	height: 16px;
+	border-radius: 16px;
+	position: absolute;
+	top: 2px;
+	left: 21px;
+	transition: all 0.3s;
+	box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.3);
+}
+.disabled .chkbox {
+	background: #e40c2b;
+}
+.disabled .chkBox:after {
+	left: 2px;
+	right: auto;
+}
