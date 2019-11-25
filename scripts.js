@@ -18,7 +18,7 @@ var Roomapp = {
 		});
 
         this.$resultsArea = document.querySelector('.js-students');
-        this.$className = document.querySelector('.js-className');
+		this.$className = document.querySelector('.js-className');
 
 		this.handleSelections();
 
@@ -92,15 +92,11 @@ var Roomapp = {
 		
 		me.students = students;
 		
-		var $html = '<table><thead><tr><th>Name</th><th>Details</th><th>Include</th></tr></thead><tbody>'
+		var $html = '<table><thead><tr><th class="name">Name</th><th class="details">Details</th><th class="include">Include<span class="js-includeNo includeNo">[ '+students.length+' ]</span></th></tr></thead><tbody>'
 		for (var i = 0; i < students.length; i++) {
 			$html += '<tr><td>' + students[i].name + '</td><td>' + students[i].firstLine + ', ' + students[i].secondLine + '</td>' +
 			//'<td class="chk"><input type="checkbox" checked="checked" name="include" data-item-index="'+i+'" /></td></tr>';
 	'<td class="chk"><span class="chkBox" data-item-index="' + i + '"></span><input type="checkbox" checked="checked" name="include" data-item-index="'+i+'" /></td></tr>';
-
-
-
-			
 		}
 		$html += '</tbody></table>';
 		
@@ -109,6 +105,8 @@ var Roomapp = {
         
         this.$className.value = data[0]['Class'];
 		this.$resultsArea.innerHTML = newdiv.innerHTML;
+
+		this.$includeNo = document.querySelector('.js-includeNo');
     },
     
 	handleSelections: function() {
@@ -129,6 +127,10 @@ var Roomapp = {
                 }				
 				me.students[chk.getAttribute('data-item-index')]['include'] = chk.checked;
 			}
+
+
+			me.$includeNo.innerText = '[ '+  me.$resultsArea.querySelectorAll('input[type=checkbox]:checked').length +' ] ';
+
 		});
 	
 	},	
