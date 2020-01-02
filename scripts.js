@@ -24,7 +24,9 @@ var Roomapp = {
 
     },
     formatName: function(name) {
-		return name.split(' ').reverse()[0];
+		var splitName = name.split(' ');
+		// TODO -> Check for dupes of surname
+		return splitName.reverse()[0] + ' ' + splitName[0].slice(0,1);
 	},
 	getPupilPremium: function(d) {
 		var pupilPremium = d["Pupil Premium Indicator"];
@@ -83,7 +85,7 @@ var Roomapp = {
 		// TODO combine into map above...
 		students = students.map(function(s) {
 			return {
-				name: s.name,
+				name: me.getName(s, students),
 				firstLine: me.firstLine(s),
 				secondLine: me.secondLine(s),
 				include: true
@@ -95,8 +97,7 @@ var Roomapp = {
 		var $html = '<table><thead><tr><th class="name">Name</th><th class="details">Details</th><th class="include">Include<span class="js-includeNo includeNo">[ '+students.length+' ]</span></th></tr></thead><tbody>'
 		for (var i = 0; i < students.length; i++) {
 			$html += '<tr><td>' + students[i].name + '</td><td>' + students[i].firstLine + ', ' + students[i].secondLine + '</td>' +
-			//'<td class="chk"><input type="checkbox" checked="checked" name="include" data-item-index="'+i+'" /></td></tr>';
-	'<td class="chk"><span class="chkBox" data-item-index="' + i + '"></span><input type="checkbox" checked="checked" name="include" data-item-index="'+i+'" /></td></tr>';
+			'<td class="chk"><span class="chkBox" data-item-index="' + i + '"></span><input type="checkbox" checked="checked" name="include" data-item-index="'+i+'" /></td></tr>';
 		}
 		$html += '</tbody></table>';
 		
@@ -108,7 +109,16 @@ var Roomapp = {
 
 		this.$includeNo = document.querySelector('.js-includeNo');
     },
-    
+	
+	getName: function(student, data) {
+
+
+		console.log(student, data);
+
+		return student.name;
+
+	}, 
+
 	handleSelections: function() {
 	
 		var me = this;
