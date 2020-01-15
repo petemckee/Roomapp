@@ -2,6 +2,7 @@
 var Roomapp = {
 
 	includeSecondSlide: true,
+	invalidPupilNames: ['Marksheet Name', 'Group Name', 'Export Date'],
 
     init: function() {
 
@@ -26,7 +27,7 @@ var Roomapp = {
     formatName: function(name) {
 		var splitName = name.split(' ');
 		// TODO -> Check for dupes of surname
-		return splitName.reverse()[0] + ' ' + splitName[0].slice(0,1);
+		return splitName.reverse()[0] + ' ' + splitName[1].slice(0,1);
 	},
 	getPupilPremium: function(d) {
 		var pupilPremium = d["Pupil Premium Indicator"];
@@ -58,16 +59,14 @@ var Roomapp = {
 		var me = this;
 		// -> TODO get just the data we need...
 		// -> TODO use mustache template
-		
+
 		var firstRow = data[0];
 		var colNames = Object.getOwnPropertyNames(firstRow);
 		var targetGradeColumnName = me.getTargetGradeColumnName(colNames);
 		var currentGradeColumnName = me.getCurrentGradeColumnName(colNames);
 				
 		var students = data.map(function(d) {
-			
 			var name = me.formatName(d['Surname Forename']);
-			
 			// TODO -> Check if array worked and only has 2 elements
 			// TODO -> Check surnames to see if first letter is required...
 			/* 	var studentDetails = String.Format("{0}T: {1} {2}{0}{3}{4}", Environment.NewLine, student.TargetGrade, student.CurrentGrade, pp, sen*/
@@ -78,7 +77,8 @@ var Roomapp = {
 				senStatus: me.getSen(d),
 				targetGrade: me.getColumnValue(d[targetGradeColumnName]),
 				currentGrade: me.getColumnValue(d[currentGradeColumnName]),
-                include: true
+				//include: true
+				include: me.looksLikeValidPupil(d['Surname Forename'])
 			}
 		});
 		
@@ -112,14 +112,21 @@ var Roomapp = {
 	
 	getName: function(student, data) {
 
-
 		console.log(student, data);
-
 		return student.name;
 
 	}, 
 
-	handleSelections: function() {
+	looksLikeValidPupil: function(name) {
+	
+
+		return this.invalidPupilNames.some(function(v) { return name.indexOf(v) === -1; });
+
+		//substrings.some(function(v) { return str.indexOf(v) >= 0; })
+
+	},
+
+	handleSelections: function() { 
 	
 		var me = this;
 		document.body.addEventListener('click', function(e) {
