@@ -3,7 +3,8 @@ var Roomapp = {
 
 	includeSecondSlide: true,
 	invalidPupilNames: ['Marksheet Name', 'Group Name', 'Export Date'],
-
+	abbreviateSurnames: false,
+	
     init: function() {
 
 		var me = this;
@@ -27,7 +28,12 @@ var Roomapp = {
     formatName: function(name) {
 		var splitName = name.split(' ');
 		// TODO -> Check for dupes of surname
-		return splitName.reverse()[0] + ' ' + splitName[1].slice(0,1);
+		
+		if (this.abbreviateSurnames) {
+			return splitName.reverse()[0] + ' ' + splitName[1].slice(0,1);
+		}
+		
+		return splitName.reverse()[0] + ' ' + splitName[1];
 	},
 	getPupilPremium: function(d) {
 		var pupilPremium = d["Pupil Premium Indicator"];
@@ -96,10 +102,17 @@ var Roomapp = {
 		
 		var $html = '<table><thead><tr><th class="name">Name</th><th class="details">Details</th><th class="include">Include<span class="js-includeNo includeNo">[ '+students.length+' ]</span></th></tr></thead><tbody>'
 		for (var i = 0; i < students.length; i++) {
-			$html += '<tr><td>' + students[i].name + '</td><td>' + students[i].firstLine + ', ' + students[i].secondLine + '</td>' +
-			'<td class="chk"><span class="chkBox" data-item-index="' + i + '"></span><input type="checkbox" checked="checked" name="include" data-item-index="'+i+'" /></td></tr>';
+			
+			let $disabled = (students[i].secondLine === 'undefined ');
+			
+			$html += '<tr'+($disabled ? ' class="disabled"' : '')+'><td>' + students[i].name + '</td><td>' + students[i].firstLine + ', ' + students[i].secondLine + '</td>' +
+			'<td class="chk"><span class="chkBox" data-item-index="' + i + '"></span><input type="checkbox"'+($disabled ? ' checked="checked"' : '')+' name="include" data-item-index="'+i+'" /></td></tr>';
+
+			me.students[i]['include'] = !$disabled;
 		}
 		$html += '</tbody></table>';
+		
+		console.log(me.students);
 		
 		var newdiv = document.createElement('div');
         newdiv.innerHTML = $html;
@@ -111,10 +124,7 @@ var Roomapp = {
     },
 	
 	getName: function(student, data) {
-
-		console.log(student, data);
 		return student.name;
-
 	}, 
 
 	looksLikeValidPupil: function(name) {
@@ -145,7 +155,6 @@ var Roomapp = {
 				me.students[chk.getAttribute('data-item-index')]['include'] = chk.checked;
 			}
 
-
 			me.$includeNo.innerText = '[ '+  me.$resultsArea.querySelectorAll('input[type=checkbox]:checked').length +' ] ';
 
 		});
@@ -155,18 +164,20 @@ var Roomapp = {
 	
 		data = data.filter(function(i) { return i.include === true });
 				
-		var pptx = new PptxGenJS();
-		var slide = pptx.addNewSlide();
+		let pptx = new PptxGenJS();
+		let slide = pptx.addNewSlide();
 
-		slide.addText(this.$className.value, { x: 0, y: 0, h: 0.5, w: 1.5, fontSize: 12, color: '000000' });
+		// pptxGen measurements are in inches
+		this.boxWidth = 1.25;
+		const boxHeight = 0.7;
+		
+		slide.addText(this.$className.value, { x: 0, y: 0, h: boxHeight, w: 1.5, fontSize: 11.5, color: '000000' });
 
 		if (this.includeSecondSlide) {
-			var slide2 = pptx.addNewSlide();
-			slide2.addText(this.$className.value, { x: 0, y: 0, h: 0.5, w: 1.5, fontSize: 12, color: '000000' });
+			var slide2 = pptx.addNewSlide()
+			slide2.addText(this.$className.value, { x: 0, y: 0, h: boxHeight, w: 1.5, fontSize: 11.5, color: '000000' });
 		}
-
-        // pptxGen measurements are in inches
-        this.boxWidth = 1.25;
+		
         var positions = this.getSeatPositions();    
 
 		for (var i = 0; i < data.length; i++) {
@@ -179,12 +190,22 @@ var Roomapp = {
 				{text: student.firstLine, options: { fontSize: 8, color: '000000', breakLine: true }},
 				{text: student.secondLine, options: { fontSize: 8, color: '000000'}}
 				],
-				{ x: position.x, y: position.y, h: 0.5, w: this.boxWidth, fontSize: 10, color: '000000', line: '303030' }
+				{ x: position.x, y: position.y, h: boxHeight, w: this.boxWidth, fontSize: 10, color: '000000', line: '303030' }
 			);
 
-			slide2.addText([{text: student.name, options: { fontSize: 10, color: '000000', breakLine: true }}],
-				{ x: position.x, y: position.y, h: 0.5, w: this.boxWidth, fontSize: 10, color: '000000', line: '303030' }
-			);
+			if (this.includeSecondSlide) {
+				slide2.addText([{text: student.name, options: {fontSize: 10, color: '000000', breakLine: true}}],
+					{
+						x: position.x,
+						y: position.y,
+						h: boxHeight,
+						w: this.boxWidth,
+						fontSize: 10,
+						color: '000000',
+						line: '303030'
+					}
+				);
+			}
 		}
 
 		pptx.save('demo');
